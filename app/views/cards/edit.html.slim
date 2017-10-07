@@ -1,0 +1,73 @@
+- @title = "Карточка товара #{@card.card_name}"
+
+
+h1 Обновление карточки товара  "#{@card.card_name}"
+
+p
+  = form_for @card do |f|
+    - if @card.errors.any?
+      #error_explanation
+        h2 = 'Обратите внимания на следующие поля:'
+        ul
+          - @card.errors.full_messages.each do |message|
+            li = message
+    .form-block
+      .form
+        = f.text_field :card_name, placeholder: 'Название карточки товара*', value: "#{@card.card_name}"
+      .form-btn
+        = f.submit('Обновить название карточки', class: 'btn-primary')
+
+
+
+h2 Карточка товара содержит следующие поля
+
+table.table.table-striped
+  thead
+    tr
+      th Название поля
+      th
+
+  tbody
+  - @attr_names.each do |atr|
+    tr
+      td = atr.attribute_rus_name
+      td
+        = form_for @card_attrs , url: {action: 'create_input_card'} do |f|
+          - if @card_attrs.errors.any?
+            #error_explanation
+              h2 = 'Обратите внимания на следующие поля:'
+              ul
+                - @card_attrs.errors.full_messages.each do |message|
+                  li = message
+          .form-block
+            .form
+              = f.hidden_field :card_id, value: "#{@card.id}"
+            .form
+              = f.hidden_field :product_atrs_id, value: "#{atr.id}"
+            .form-btn
+              = f.submit('Удалить поле из карточки', class: 'btn-primary', name: 'delete_input_card')
+
+
+p
+  = form_for @card_attrs , url: {action: 'create_input_card'} do |f|
+    - if @card_attrs.errors.any?
+      #error_explanation
+        h2 = 'Обратите внимания на следующие поля:'
+        ul
+          - @card_attrs.errors.full_messages.each do |message|
+            li = message
+    .form-block
+      .form
+        p
+          strong = 'Возможные поля для карточки'
+        = f.select :product_atrs_id, options_from_collection_for_select(@attrs, :id, :attribute_rus_name)
+      .form
+        = f.hidden_field :card_id, value: "#{@card.id}"
+
+      .form-btn
+        = f.submit('Добавить новое поле', class: 'btn-primary', name: 'create_input_card')
+
+/удаление
+.form-inline
+  .form
+    = link_to 'Удалить карточку', @card, data: { confirm: 'Уверен?' }, method: 'delete'

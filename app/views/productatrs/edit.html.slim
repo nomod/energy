@@ -1,0 +1,24 @@
+- @title = "Атрибут #{@attr.attribute_rus_name}"
+
+h1 Обновление атрибута "#{@attr.attribute_rus_name}"
+
+p
+  = form_for @attr do |f|
+    - if @attr.errors.any?
+      #error_explanation
+        h2 = 'Обратите внимания на следующие поля:'
+        ul
+          - @attr.errors.full_messages.each do |message|
+            li = message
+    .form-block
+      .form
+        = f.text_field :attribute_rus_name, required: true, placeholder: 'Название атрибута*', value: "#{@attr.attribute_rus_name}"
+      .form
+        = f.hidden_field :attribute_name, value: ''
+      .form-btn
+        = f.submit('Обновить атрибут', class: 'btn-primary')
+
+/удаление
+.form-inline
+  .form
+    = link_to 'Удалить атрибут', @attr, data: { confirm: 'Уверен?' }, method: 'delete'

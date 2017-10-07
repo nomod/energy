@@ -1,0 +1,101 @@
+- @title = 'Редактирование товара'
+
+h1 Редактирование товара
+p
+  = form_for @product do |f|
+    - if @product.errors.any?
+      #error_explanation
+        h2 = 'Обратите внимания на следующие поля:'
+        ul
+          - @product.errors.full_messages.each do |message|
+            li = message
+    .form-block
+      .form
+        p
+          strong = 'Название продукта'
+        = f.text_field :product_title, required: true, value: "#{@product.product_title}"
+      .form
+        p
+          strong = 'Родительская категория'
+        = f.select :category_id, options_from_collection_for_select(@categories, :id, :category_name, @product_parent_category.id)
+
+      //если продукт выводится на главной страницу, то радиокнопку "Вывести на главную" ставим в положение true, а "Не выводить на главную" в положение false
+      - if @product.view_main
+        p Сейчас на главной выводится
+        .form
+          = f.radio_button :view_main, true, checked: true
+          = f.label :view_main, 'Вывести на главную'
+        .form
+          = f.radio_button :view_main, false, checked: false
+          = f.label :view_main, 'Не выводить на главную'
+      //если продукт не выводится на главной страницу, то радиокнопку "Вывести на главную" ставим в положение false, а "Не выводить на главную" в положение true
+      - else
+        p Сейчас на главной не выводится
+        .form
+          = f.radio_button :view_main, true, checked: false
+          = f.label :view_main, 'Вывести на главную'
+        .form
+          = f.radio_button :view_main, false, checked: true
+          = f.label :view_main, 'Не выводить на главную'
+
+      //перебираем поля, которые есть у данного товара и выводим их
+      - @attr_names.each_with_index do |attr, index|
+        br
+        p
+          strong = "#{attr.attribute_rus_name}"
+
+        .input_with_delete
+
+          .input_with_delete_block_1
+            .form
+              = f.text_field :"#{attr.attribute_name}", required: true, value: "#{@attr[index].value}"
+
+          .input_with_delete_block_2
+            //удаляем поле из товара
+            = form_for @product_attrs , url: {action: 'create'} do |f|
+              .form
+                = f.hidden_field :product_id, value: "#{@product.id}"
+              .form
+                = f.hidden_field :product_atrs_id, value: "#{attr.id}"
+              .form-btn
+                = f.submit('Удалить поле', class: 'btn-primary', name: 'delete_input_product')
+          //удаляем поле из товара
+        .clear
+
+      .form
+        - if @product.image
+          img alt="" src="#{@product.image.product}"
+          = f.file_field :image
+          = f.hidden_field :image_cache
+      .form
+        p
+          strong = 'Цена'
+        = f.number_field :price, required: true, value: "#{@product.price}"
+      .form
+        = f.hidden_field :friendly_url, value: "#{@product.friendly_url}"
+      .form-btn
+        = f.submit('Обновить продукт', class: 'btn-primary')
+
+h2 Добавить новое поле
+p
+  = form_for @product_attrs , url: {action: 'create'} do |f|
+    - if @product_attrs.errors.any?
+      #error_explanation
+        h2 = 'Обратите внимания на следующие поля:'
+        ul
+          - @product_attrs.errors.full_messages.each do |message|
+            li = message
+    .form-block
+      .form
+        p
+          strong = 'Какое поле надо добавить'
+        = f.select :product_atrs_id, options_from_collection_for_select(@attrs, :id, :attribute_rus_name)
+      .form
+        = f.hidden_field :product_id, value: "#{@product.id}"
+      .form-btn
+        = f.submit('Добавить новое поле', class: 'btn-primary', name: 'create_input_product')
+
+/удаление
+.form-inline
+  .form
+    = link_to 'Удалить продукт', @product, data: { confirm: 'Уверен?' }, method: 'delete'

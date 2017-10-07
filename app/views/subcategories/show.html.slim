@@ -1,0 +1,112 @@
+//////////////////////////////////  если вложенность категория - подкатегория  //////////////////////////////////
+
+- if !@subcategory.nil? && !@category.nil?
+
+  //админская часть
+  - if !current_user.nil?
+    - if admin?
+      h3 это субкатегория
+  //админская часть
+
+  - @title = @subcategory.category_name
+  h1 = @subcategory.category_name
+
+  ///////////////////////если есть подкатегории у текущей подкатегории, то выводим их
+
+  //если есть подкатегории для показа
+  - if !@sub_subcategory.empty?
+
+    //админская часть
+    - if !current_user.nil?
+      - if admin?
+        h3 Подкатегории категории
+    //админская часть
+
+    .all_products
+      - @sub_subcategory.each do |sub|
+        .img_category
+          a href="/#{sub.friendly_url}"
+            img alt="" src="#{sub.image.category}"
+            .img_background_name
+            .img_category_name
+              = sub.category_name
+
+  //если есть товары у подкатегории, то выводим их
+  - if !@products.empty?
+
+    h3 Товары категории
+
+    table.table.table-striped
+      tr
+        th Название
+        th Цена
+      tbody
+        - @products.each do |product|
+          tr
+            td = link_to "#{product.product_title}", "/#{product.friendly_url}"
+            td = "#{product.price}"
+
+
+
+  //если есть контент у подкатегории, то выводим его
+  - if @subcategory.category_content
+
+    //админская часть
+    - if !current_user.nil?
+      - if admin?
+        h3 Контент категории
+    //админская часть
+
+    = raw @subcategory.category_content
+
+
+//////////////////////////////////  если вложенность категория - товар  //////////////////////////////////
+- if !@category.nil? && !@product.nil?
+
+  //админская часть
+  - if !current_user.nil?
+    - if admin?
+      h3 это товар
+  //админская часть
+
+  - @title = @product.product_title
+  h1 = @product.product_title
+
+  .product_features
+    .product_img
+      = image_tag "#{@product.image.product}"
+      .product_price = "Цена: #{@product.price} руб."
+
+
+      //форма добавления товара в корзину
+
+        //если пользователь авторизован
+      - if !current_user.nil?
+        = form_for @order, url: {controller: 'baskets', action: 'add_basket'}, remote: true do |f|
+          = f.hidden_field :user_id, value: current_user.id
+          = f.hidden_field :product_id, value: @product.id
+          = f.hidden_field :number, value: '1'
+          = f.hidden_field :order_status_id, value: '1'
+          = f.hidden_field :status_user_id, value: '1'
+          = f.submit('Добавить в корзину', class: 'btn-primary', name: 'add_basket')
+
+      //если пользователь не авторизован
+      - else
+        = form_for @order, url: {controller: 'baskets', action: 'add_basket'}, remote: true do |f|
+          = f.hidden_field :product_id, value: @product.id
+          = f.hidden_field :number, value: '1'
+          = f.hidden_field :order_status_id, value: '1'
+          = f.hidden_field :status_user_id, value: '2'
+          = f.submit('Добавить в корзину', class: 'btn-primary', name: 'add_basket')
+
+
+    .product_description
+      .product_description_title Параметры
+      table.table.table-striped
+        tbody
+
+        - @attr.each_with_index do |atr, index|
+          tr
+            td = @attr_names[index]
+            td = @attr[index].value
+    .clear

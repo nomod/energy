@@ -1,0 +1,17 @@
+- @title = 'Добавление новой карточки товара'
+
+h1 Добавление новой карточки товара
+
+p
+  = form_for @new_card do |f|
+    - if @new_card.errors.any?
+      #error_explanation
+        h2 = 'Обратите внимания на следующие поля:'
+        ul
+          - @new_card.errors.full_messages.each do |message|
+            li = message
+    .form-block
+      .form
+        = f.text_field :card_name, placeholder: 'Название карточки товара*', value: "#{@card_name}"
+      .form-btn
+        = f.submit('Добавить новую карточку', class: 'btn-primary')

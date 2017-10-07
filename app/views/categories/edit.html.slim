@@ -1,0 +1,67 @@
+- @title = @category.category_name
+h1 Редактируем категорию "#{@category.category_name}"
+
+p
+  = form_for @category do |f|
+    - if @category.errors.any?
+      #error_explanation
+        h2 = 'Обратите внимания на следующие поля:'
+        ul
+          - @category.errors.full_messages.each do |message|
+            li = message
+    .form-block
+      .form
+        = f.text_field :category_name, required: true, placeholder: 'Название категории*', value: "#{@category.category_name}"
+      .form
+        = f.text_area :category_content, placeholder: 'Контент категории*', value: "#{@category.category_content}"
+      .form
+        p
+          strong = 'Родительская категория'
+          //если есть родительская категория, то показываем ее в выпадающем списке, а радиокнопку "Без категории" ставим в положение false
+          - if @category.parent
+            p Сейчас родительская категория "#{@category.parent.category_name}"
+            = f.select :parent_id, options_from_collection_for_select(@categories, :id, :category_name, @category.parent.id)
+            .form
+              = f.radio_button :parent_id, '0', checked: false
+              = f.label :parent_id, 'Без категории'
+          //если категория родительская, то радиокнопку "Без категории" ставим в положение true
+          - else
+            p Категория является родительской
+            = f.select :parent_id, options_from_collection_for_select(@categories, :id, :category_name, @category.id)
+            .form
+              = f.radio_button :parent_id, '0', checked: true
+              = f.label :parent_id, 'Без категории'
+      .form
+        //если категория выводится на главной страницу, то радиокнопку "Вывести на главную" ставим в положение true, а "Не выводить на главную" в положение false
+        - if @category.view_main
+          p Сейчас на главной выводится
+          .form
+            = f.radio_button :view_main, true, checked: true
+            = f.label :view_main, 'Вывести на главную'
+          .form
+            = f.radio_button :view_main, false, checked: false
+            = f.label :view_main, 'Не выводить на главную'
+        //если категория не выводится на главной страницу, то радиокнопку "Вывести на главную" ставим в положение false, а "Не выводить на главную" в положение true
+        - else
+          p Сейчас на главной не выводится
+          .form
+            = f.radio_button :view_main, true, checked: false
+            = f.label :view_main, 'Вывести на главную'
+          .form
+            = f.radio_button :view_main, false, checked: true
+            = f.label :view_main, 'Не выводить на главную'
+      .form
+        - if @category.image
+          img alt="" src="#{@category.image.category}"
+          = f.file_field :image
+          = f.hidden_field :image_cache
+      .form
+        = f.hidden_field :friendly_url, value: "#{@category.friendly_url}"
+      .form-btn
+        = f.submit('Обновить категорию', class: 'btn-primary')
+
+
+/удаление
+.form-inline
+  .form
+    = link_to 'Удалить категорию', @category, data: { confirm: 'Уверен? Будут удалены все вложенные категории, посты и продукты!' }, method: 'delete'

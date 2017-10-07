@@ -1,0 +1,43 @@
+doctype html
+html
+  head
+    meta content = "text/html; charset=UTF-8" http-equiv = "Content-Type"
+    title = @title || 'EnergyCity'
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
+    //иконки
+    = stylesheet_link_tag '//cdn.hippicons.com/css/hippicons-min.css'
+
+    //swiper-slider
+    = stylesheet_link_tag '//cdn.jsdelivr.net/swiper/3.4.1/swiper.css'
+    = stylesheet_link_tag '//cdn.jsdelivr.net/swiper/3.4.1/swiper.min.css'
+    = javascript_include_tag '//cdn.jsdelivr.net/swiper/3.4.1/swiper.min.js'
+    = javascript_include_tag '//cdn.jsdelivr.net/swiper/3.4.1/swiper.js'
+    = javascript_include_tag '//cdn.jsdelivr.net/swiper/3.4.1/swiper.jquery.min.js'
+    = javascript_include_tag '//cdn.jsdelivr.net/swiper/3.4.1/swiper.jquery.js'
+  //swiper-slider
+
+
+  body
+    / .pop_up для затемнения фона при вызове модальной формы на услугах
+    .pop_up
+
+    = render 'shared/header'
+
+    //выводим всплывающее сообщение об успешной регистрации
+    - flash.each do |key, value|
+      - if key == 'success'
+        .alert.alert-success = value
+      - else
+        .alert.alert-error = value
+
+    .wrap
+      .content
+        = yield
+
+    = render 'shared/footer'
+
+  //кнопка вверх
+  .scrollup
+    i.fa.fa-chevron-up

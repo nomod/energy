@@ -1,0 +1,84 @@
+- if !current_user.nil?
+  - @title = 'Корзина пользователя: ' "#{current_user.user_name}" + ' ' + "#{current_user.surname}"
+  .wrap
+    h1 Корзина пользователя:  #{current_user.user_name} #{current_user.surname}
+
+- else
+  - @title = 'Ваша корзина'
+  .wrap
+    h1 Ваша корзина
+
+
+//включаем счетчик общей суммы заказа
+- @summ = 0
+
+/общая часть
+table.table.table-striped
+  thead
+    tr
+      th Название продукта
+      th Цена за шт.
+      th Количество
+      th
+      th
+      th
+      th
+
+  tbody
+  - @mass_products.each_with_index do |product, index|
+
+    /число товаров
+    - @numbers_product = @mass_products_in_basket_full[index].number
+    /цена товара
+    - @price_product = product.price
+    /сумма данного заказа
+    - @sum_order = @numbers_product * @price_product
+
+    /обновляем счетчик общей суммы заказа
+    - @summ = @summ + @sum_order
+
+    tr
+      td = product.product_title
+      td = "#{product.price} руб."
+      td id = "#{product.id}"
+        = @mass_products_in_basket_full[index].number
+
+      td
+        /плюс один такой же товар в корзину
+        = form_for @basket, remote: true do |f|
+          = f.hidden_field :product_id, value: "#{product.id}"
+          = f.hidden_field :order_id, value: "#{@mass_products_in_basket_full[index].order_id}"
+          - if !current_user.nil?
+            = f.hidden_field :status_user_id, value: '1'
+          - else
+            = f.hidden_field :status_user_id, value: '2'
+          = f.submit('+', class: 'btn-primary btn-add', name: 'add_one_product')
+
+      td
+        /минус один такой же товар из корзины
+        = form_for @basket, remote: true do |f|
+          = f.hidden_field :product_id, value: "#{product.id}"
+          = f.hidden_field :order_id, value: "#{@mass_products_in_basket_full[index].order_id}"
+          - if !current_user.nil?
+            = f.hidden_field :status_user_id, value: '1'
+          - else
+            = f.hidden_field :status_user_id, value: '2'
+          = f.submit('-', class: 'btn-primary btn-delete', name: 'delete_one_product', disabled: false)
+
+      td = link_to 'Просмотреть', '/'+product.friendly_url
+
+      td
+        /удаляем товар из корзины
+        = form_for @basket, remote: true do |f|
+          = f.hidden_field :product_id, value: "#{product.id}"
+          = f.hidden_field :order_id, value: "#{@mass_products_in_basket_full[index].order_id}"
+          - if !current_user.nil?
+            = f.hidden_field :status_user_id, value: '1'
+          - else
+            = f.hidden_field :status_user_id, value: '2'
+          = f.submit('Удалить', class: 'btn-primary', name: 'delete_product_from_basket')
+
+.summ
+  = 'Итого заказ на сумму: '
+  span.num_summ = @summ
+  = ' руб.'

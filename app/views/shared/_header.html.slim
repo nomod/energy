@@ -1,0 +1,52 @@
+- if !current_user.nil?
+  - if admin?
+    .wrap
+      .header_admin
+        = link_to 'Категории', categories_path
+        = link_to 'Продукты', products_path
+        = link_to 'Карточки товара', cards_path
+        = link_to 'Атрибуты для карточки', productatrs_path
+        /= link_to 'Заявки', forms_path
+        = link_to 'Медиа', images_path
+
+
+.wrap
+  .header
+    .logo
+      a href='/'
+        | EnergyCity.Ru
+        br
+        span Товары для энергетики
+    .phone
+      .phone_tel
+        i.hi.hi-phone
+          = link_to '+7 (812) 309-43-22', 'tel:+7(812)309-43-22'
+    .user_actions
+
+      - if !current_user.nil?
+        i.hi.hi-sign-out.hi-lg
+          = link_to 'Выйти', signout_path, method: 'delete'
+        span.nav__link-text.fio = link_to "#{current_user.user_name}" + " " +"#{current_user.surname}", current_user
+        span.nav__link-text.hidden_fio_id = "#{current_user.id}"
+
+      - else
+        i.hi.hi-sign-in.hi-lg
+          = link_to 'Войти', signin_path
+        i.hi.hi-user.hi-lg
+          = link_to 'Регистрация', signup_path
+
+    .clear
+
+    //форма поиска по сайту
+    = form_tag search_index_path, class: 'search', method: 'post' do
+      = text_field_tag :search, params[:search], required: true, placeholder: 'Что ищем?*'
+      = submit_tag 'Найти', class: 'btn-primary', name: nil
+
+    i.hi.hi-shopping-cart.hi-2x
+      = link_to 'Корзина', baskets_path
+
+    //проверяем корзину пользователя
+    .basket = 'Товаров в корзине ' "#{numbers_in_basket}"
+
+
+    .clear

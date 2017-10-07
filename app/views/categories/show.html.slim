@@ -1,0 +1,57 @@
+//админская часть
+- if !current_user.nil?
+  - if admin?
+    h3 это категория
+//админская часть
+
+- @title = @category.category_name
+h1 = @category.category_name
+
+///////////////////////если есть подкатегории у категории, то выводим их
+
+//если есть подкатегории для показа
+- if !@subcategory.empty?
+
+  //админская часть
+  - if !current_user.nil?
+    - if admin?
+      h3 Подкатегории категории
+    //админская часть
+
+.all_products
+  - @subcategory.each do |sub|
+    .img_category
+      a href="/#{sub.friendly_url}"
+        img alt="" src="#{sub.image.category}"
+        .img_background_name
+        .img_category_name
+          = sub.category_name
+
+
+//////////////////////если есть продукты у категории, то выводим их
+
+- if !@products.empty?
+
+  h3 Товары категории
+
+  table.table.table-striped
+    tr
+      th Название
+      th Цена
+    tbody
+      - @products.each do |product|
+        tr
+          td = link_to "#{product.product_title}", "/#{product.friendly_url}"
+          td = "#{product.price}"
+
+
+//////////////////////если есть контент у категории, то выводим его
+- if @category.category_content
+
+  //админская часть
+  - if !current_user.nil?
+    - if admin?
+      h3 Контент категории
+  //админская часть
+
+  = raw @category.category_content

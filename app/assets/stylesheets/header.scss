@@ -1,0 +1,125 @@
+.logo{
+  display: inline-block;
+  margin-right: 233px;
+  float: left;
+  text-align: center;
+  line-height: 20px;
+
+  & a{
+    font-size: 40px;
+
+    & span{
+      font-size: 14px;
+      color: black;
+    }
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+.header{
+  padding: 0 0 10px 0;
+  height: 160px;
+  margin-top: 40px;
+}
+.header_admin{
+  background: #3d6c8c;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 20px;
+  display: flex;
+  justify-content: space-around;
+
+  & a{
+    color: white;
+  }
+}
+.phone{
+  float: left;
+}
+.hi-phone{
+  color: black;
+
+  &:before {
+    font-size: 22px;
+  }
+
+  & a{
+    font-weight: bold;
+    font-size: 28px;
+    margin-left: 10px;
+    color: black;
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+.hi-sign-in{
+  color: #66c548;
+  margin-right: 33px;
+
+  & a{
+    font-size: 15px;
+    margin-left: 10px;
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+.hi a{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+.hi-sign-out{
+  color: #66c548;
+  margin-right: 33px;
+
+  & a{
+    font-size: 15px;
+    margin-left: 10px;
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+.hi-user{
+  color: #66c548;
+
+  & a{
+    font-size: 15px;
+    margin-left: 10px;
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+.hi-shopping-cart{
+  color: #8a541a;
+  text-align: right;
+  width: 30%;
+
+  & a{
+    font-weight: bold;
+    font-size: 20px;
+    margin-left: 10px;
+    color: #8a541a;
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+.user_actions{
+  text-align: right;
+  margin-bottom: 70px;
+}
+.fio{
+  font-size: 15px;
+}
+.hidden_fio_id{
+  display: none;
+}

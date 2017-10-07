@@ -1,0 +1,47 @@
+//админская часть
+- if !current_user.nil?
+  - if admin?
+    h3 это продукт
+//админская часть
+
+- @title = @product.product_title
+h1 = @product.product_title
+
+.product_features
+  .product_img
+    = image_tag "#{@product.image.product}"
+    .product_price = "Цена: #{@product.price} руб."
+
+
+    //форма добавления товара в корзину
+
+      //если пользователь авторизован
+    - if !current_user.nil?
+      = form_for @order, url: {controller: 'baskets', action: 'add_basket'}, remote: true do |f|
+        = f.hidden_field :user_id, value: current_user.id
+        = f.hidden_field :product_id, value: @product.id
+        = f.hidden_field :number, value: '1'
+        = f.hidden_field :order_status_id, value: '1'
+        = f.hidden_field :status_user_id, value: '1'
+        = f.submit('Добавить в корзину', class: 'btn-primary', name: 'add_basket')
+
+    //если пользователь не авторизован
+    - else
+      = form_for @order, url: {controller: 'baskets', action: 'add_basket'}, remote: true do |f|
+        = f.hidden_field :product_id, value: @product.id
+        = f.hidden_field :number, value: '1'
+        = f.hidden_field :order_status_id, value: '1'
+        = f.hidden_field :status_user_id, value: '2'
+        = f.submit('Добавить в корзину', class: 'btn-primary', name: 'add_basket')
+
+
+  .product_description
+    .product_description_title Параметры
+    table.table.table-striped
+      tbody
+
+      - @attr.each_with_index do |atr, index|
+        tr
+          td = @attr_names[index]
+          td = @attr[index].value
+  .clear

@@ -1,0 +1,18 @@
+- @title = 'Карточки товара'
+
+h1 Карточки товара
+
+.create_item
+  = link_to 'Добавить новую карточку', new_card_path
+
+table.table.table-striped
+  thead
+    tr
+      th Название карточки
+      th
+
+  tbody
+  - @cards.each do |card|
+    tr
+      td = card.card_name
+      td = link_to 'Редактировать', edit_card_path(card.id)

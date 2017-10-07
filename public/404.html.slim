@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    meta content = "text/html; charset=UTF-8" http-equiv = "Content-Type"
+    title = '404 ошибка'
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
+    //иконки
+    = stylesheet_link_tag '//cdn.hippicons.com/css/hippicons-min.css'
+
+  body
+
+    = render 'shared/header'
+
+    .wrap
+      .content
+
+
+        .error_404 = '404'
+        .text = 'такой страницы не существует'
+
+  = render 'shared/footer'

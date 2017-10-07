@@ -1,0 +1,19 @@
+- @title = 'Добавление нового атрибута'
+
+h1 Добавление нового атрибута
+
+p
+  = form_for @new_attr do |f|
+    - if @new_attr.errors.any?
+      #error_explanation
+        h2 = 'Обратите внимания на следующие поля:'
+        ul
+          - @new_attr.errors.full_messages.each do |message|
+            li = message
+    .form-block
+      .form
+        = f.text_field :attribute_rus_name, required: true, placeholder: 'Название атрибута*', value: "#{@attribute_rus_name}"
+      .form
+        = f.hidden_field :attribute_name, value: ''
+      .form-btn
+        = f.submit('Добавить новый атрибут', class: 'btn-primary')

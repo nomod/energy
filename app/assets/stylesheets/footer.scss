@@ -1,0 +1,72 @@
+.footer{
+  background-color: #243845;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+.content {
+  padding-bottom: 380px;
+}
+.block_footer{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+.copyright{
+  color: #969696;
+  text-align: center;
+  margin-top: 28px;
+  font-size: 11px;
+  padding: 10px;
+}
+.logo_footer{
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+
+  & a{
+    font-size: 40px;
+
+    & span{
+      font-size: 14px;
+      color: white;
+    }
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+.phone_footer{
+
+  & .hi-phone{
+    color: #969696;
+
+    &:before {
+      font-size: 22px;
+    }
+
+    & a{
+      font-weight: bold;
+      font-size: 28px;
+      margin-left: 10px;
+      color: #969696;
+
+      &:hover{
+        text-decoration: none;
+      }
+    }
+  }
+}
+.hi-clock-o{
+  color: #969696;
+  text-align: center;
+
+  &:before {
+    margin-right: 10px;
+  }
+
+  & span{
+    line-height: 40px;
+  }
+}

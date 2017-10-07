@@ -1,0 +1,40 @@
+- @title = 'Добавление нового товара'
+
+h1 Добавление нового товара
+
+p Укажите карточку товара, по которой нужно добавить товар
+#select-card
+  = select_tag :cards, options_from_collection_for_select(@cards, :id, :card_name)
+
+= form_for @product do |f|
+  - if @product.errors.any?
+    #error_explanation
+      h2 = 'Обратите внимания на следующие поля:'
+      ul
+        - @product.errors.full_messages.each do |message|
+          li = message
+  .form-block
+    .form
+      = f.text_field :product_title, required: true, placeholder: 'Название продукта*', value: "#{}"
+    .form
+      p
+        strong = 'Родительская категория'
+      = f.select :category_id, options_from_collection_for_select(@categories, :id, :category_name)
+
+    / сюда вставляем поля карточки из аякса
+    .form.form-ajax
+
+    .form
+      = f.radio_button :view_main, true, checked: false
+      = f.label :view_main, 'Вывести на главную'
+    .form
+      = f.radio_button :view_main, false, checked: true
+      = f.label :view_main, 'Не выводить на главную'
+    .form
+      = f.file_field :image, required: true
+    .form
+      = f.hidden_field :friendly_url, value: ''
+    .form
+      = f.number_field :price, required: true, placeholder: 'Цена*', value: "#{}"
+    .form-btn
+      = f.submit('Добавить товар', class: 'btn-primary')

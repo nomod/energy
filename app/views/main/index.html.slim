@@ -1,0 +1,18 @@
+.header-h1 Наша продукция
+
+.all_products
+  - @categories.each do |category|
+    .img_category
+      a href="/#{category.friendly_url}"
+        img alt="" src="#{category.image.category}"
+        .img_background_name
+        .img_category_name
+          = category.category_name
+
+  - @products.each do |product|
+    .img_product
+      a href="/#{product.friendly_url}"
+        img alt="" src="#{product.image.product}"
+        .img_background_name
+        .img_product_name
+          = product.product_title

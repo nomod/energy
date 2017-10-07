@@ -1,0 +1,27 @@
+- @title = 'Продукты'
+
+h1 Все продукты
+
+.create_item
+  = link_to 'Добавить новый продукт', new_product_path
+
+table.table.table-striped
+  thead
+    tr
+      th Название продукта
+      th Выводится на главной
+      th Родительская категория
+      th
+      th
+
+  tbody
+  - @products.each_with_index do |product, index|
+    tr
+      td = product.product_title
+      - if product.view_main?
+        td да
+      - else
+        td нет
+      td = @parent_category[index].category_name
+      td = link_to 'Просмотреть', '/'+product.friendly_url
+      td = link_to 'Редактировать', edit_product_path(product.friendly_url)

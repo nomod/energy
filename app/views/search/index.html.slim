@@ -1,0 +1,11 @@
+- @title = "Результаты поиска по запросу #{params[:search]}"
+
+h1 Результаты поиска по запросу "#{params[:search]}"
+
+-if @categories
+  - @categories.each do |cat|
+    p = link_to cat.category_name, '/'+cat.friendly_url
+
+  -if @products
+    - @products.each do |prod|
+      p = link_to prod.product_title, '/'+prod.friendly_url

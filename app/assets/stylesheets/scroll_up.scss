@@ -1,0 +1,17 @@
+.scrollup {
+  position: fixed;
+  color: #fff;
+  background-color: #3d6c8c;
+  right: 40px;
+  bottom: 40px;
+  padding: 4px 10px;
+  font-size: 30px;
+  cursor: pointer;
+  display: none;
+  text-align: center;
+  border-radius: 25px;
+
+  &:hover{
+    background-color: #284456;
+  }
+}

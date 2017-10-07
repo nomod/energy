@@ -1,0 +1,46 @@
+- @title = 'Все пользователи'
+
+.header-h1 Пользователи
+
+table.table.table-striped
+  tbody
+    tr
+      th Пользователь
+      th Статус
+      th
+    - @users.each do |user|
+      tr
+        //если пользователь не админ
+        - if !user.admin
+          td = user.user_name + ' ' + user.surname
+        //если админ, то подсвечиваем
+        - else
+          td.background = user.user_name + ' ' + user.surname
+
+        //если статус у пользователя стоит как true, т.е. подтвержден
+        - if user.status
+          td.list_public id = "#{user.id}"
+
+            //если пользователь не админ
+            - if !user.admin
+              p = 'Подтвержден'
+              = form_for @user, authenticity_token: true, remote:true do |f|
+                = f.hidden_field :user_id, value: user.id
+                p = submit_tag 'Снять', name: 'nopublic_btn'
+
+            //если пользователь админ, то убираем возможность снятия подтверждения у пользователя - админ
+            - else
+              p = 'Подтвержден'
+              = form_for @user, authenticity_token: true, remote: true do |f|
+                = f.hidden_field :user_id, value: user.id
+
+        //если статус у пользователя стоит как false, т.е. не подтвержден
+        - else
+          td.list_public id = "#{user.id}"
+            p = 'Не подтвержден'
+            = form_for @user, authenticity_token: true, remote:true do |f|
+              = f.hidden_field :user_id, value: user.id
+              p = submit_tag 'Утвердить', name: 'public_btn'
+
+        td
+          = link_to 'Профиль', user
