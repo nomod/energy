@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170928205931) do
+ActiveRecord::Schema.define(version: 20171010185525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,9 +19,8 @@ ActiveRecord::Schema.define(version: 20170928205931) do
     t.integer  "product_id"
     t.integer  "number"
     t.integer  "order_id"
-    t.integer  "status_user_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "card_with_attributes", force: :cascade do |t|
@@ -60,6 +59,7 @@ ActiveRecord::Schema.define(version: 20170928205931) do
     t.integer  "order_status_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "status_user_id"
   end
 
   create_table "product_with_attributes", force: :cascade do |t|
@@ -95,11 +95,14 @@ ActiveRecord::Schema.define(version: 20170928205931) do
     t.datetime "updated_at",       null: false
   end
 
-  create_table "unknown_orders", force: :cascade do |t|
+  create_table "unknown_users", force: :cascade do |t|
+    t.string   "unknown_user_name"
+    t.string   "email"
+    t.bigint   "telephone"
     t.string   "unknown_remember_token"
-    t.integer  "order_status_id"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.index ["unknown_remember_token"], name: "index_unknown_users_on_unknown_remember_token", using: :btree
   end
 
   create_table "users", force: :cascade do |t|

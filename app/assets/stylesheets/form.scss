@@ -108,7 +108,7 @@ form{
 
   }
 }
-form.new_category, .edit_category, .new_product, .edit_product, .new_product_with_attribute, .new_card_with_attribute, .new_card, .edit_card, .new_productatr, .edit_productatr{
+form.new_category, .edit_category, .new_product, .edit_product, .new_product_with_attribute, .new_card_with_attribute, .new_card, .edit_card, .new_productatr, .edit_productatr, .new_basket{
   border: 1px solid #efefef;
   width: 100%;
   margin: auto;
@@ -167,7 +167,7 @@ form.new_category, .edit_category, .new_product, .edit_product, .new_product_wit
   margin-top: 40px;
 }
 
-.input_with_delete, .table-striped{
+.input_with_delete, .table-striped, .form_order{
 
   & form{
     border: none;

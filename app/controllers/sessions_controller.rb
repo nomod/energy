@@ -27,17 +27,15 @@ class SessionsController < ApplicationController
 
             #кодируем токен для поиска по базе
             @unknown_remember_token = Digest::SHA1.hexdigest(@unknown_remember_token)
+            #смотрим есть ли такой пользователь
+            @unknown_user = Unknown_User.find_by(unknown_remember_token: @unknown_remember_token)
             #смотрим есть ли заказ в статусе оформляется
-            @unknown_order = Unknown_Order.find_by(unknown_remember_token: @unknown_remember_token, order_status_id: 1)
-            #id заказа
-            @unknown_order.id
+            @unknown_order = Order.find_by(user_id: @unknown_user.id, order_status_id: 1, status_user_id: 2)
             #смотрим какие товары лежат в корзине по этому заказу
-            @products_in_basket = Basket.where(order_id: @unknown_order.id, status_user_id: 2)
+            @products_in_basket = Basket.where(order_id: @unknown_order.id)
 
             #удаляем токен неавторизованного пользователя из куки
             cookies.delete(:unknown_remember_token)
-            #удаляем его заказ
-            @unknown_order.destroy
 
             #смотрим есть ли у данного пользователя заказ в статусе оформляется когда он был авторизован
             @order_known = Order.find_by(user_id: current_user.id, order_status_id: 1)
@@ -46,53 +44,32 @@ class SessionsController < ApplicationController
             if @order_known
 
               #смотрим какие товары лежат в корзине по этому заказу
-              @known_products_in_basket = Basket.where(order_id: @order_known.id, status_user_id: 1)
+              @known_products_in_basket = Basket.where(order_id: @order_known.id)
               #удаляяем их
               @known_products_in_basket.each do |product|
                 product.destroy
               end
 
-              #удаляем старый заказ
+              #удаляем неизвестного пользователя
+              @unknown_user.delete
+              #удаляем старый заказ авторизованного пользователя
               @order_known.delete
 
-              #создаем новый заказ
-              @new_order = Order.new(user_id: current_user.id, order_status_id: 1)
+              #переводим заказ на только что авторизованного пользователя
+              @unknown_order.update_attributes(user_id: current_user.id, status_user_id: 1)
 
-              if @new_order.save
-
-                #смотрим id созданного заказа
-                @id_last_known_order = Order.last.id
-
-                #перебираем найденные товары и обновляем у них статус пользователя и id заказа
-                @products_in_basket.each do |product|
-                  product.update_attributes(status_user_id: 1, order_id: @id_last_known_order)
-                end
-
-              else
-                flash[:error] = 'Что то пошло не так!'
-                redirect_to baskets_path
+              #перебираем найденные товары и обновляем у них id заказа
+              @products_in_basket.each do |product|
+                product.update_attributes(order_id: @unknown_order.id)
               end
 
             #если нет заказа
             else
 
-              #создаем новый заказ
-              @new_order = Order.new(user_id: current_user.id, order_status_id: 1)
-
-              if @new_order.save
-
-                #смотрим id созданного заказа
-                @id_last_known_order = Order.last.id
-
-                #перебираем найденные товары и обновляем у них статус пользователя и id заказа
-                @products_in_basket.each do |product|
-                  product.update_attributes(status_user_id: 1, order_id: @id_last_known_order)
-                end
-
-              else
-                flash[:error] = 'Что то пошло не так!'
-                redirect_to baskets_path
-              end
+              #удаляем неизвестного пользователя
+              @unknown_user.delete
+              #переводим заказ на только что авторизованного пользователя
+              @unknown_order.update_attributes(user_id: current_user.id, status_user_id: 1)
 
             end
 

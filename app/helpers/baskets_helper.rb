@@ -5,6 +5,7 @@ module BasketsHelper
 
     if !current_user.nil?
 
+      #смотрим заказ текущего пользователя в статусе оформляется
       @order = Order.find_by(user_id: current_user.id, order_status_id: 1)
 
       #если у пользователя есть заказ в статусе оформляется
@@ -41,31 +42,42 @@ module BasketsHelper
 
         unknown_remember_token = Digest::SHA1.hexdigest(cookies[:unknown_remember_token].to_s)
 
-        @unknown_order = Unknown_Order.find_by(unknown_remember_token: unknown_remember_token)
+        #смотрим есть ли такой пользователь
+        @unknown_user = Unknown_User.find_by(unknown_remember_token: unknown_remember_token)
 
-        #если нашли заказ
-        if @unknown_order
+        if @unknown_user
 
-          #включаем счетчик
-          @number = 0
+          #смотрим заказ текущего пользователя в статусе оформляется
+          @unknown_order = Order.find_by(user_id: @unknown_user.id, order_status_id: 1)
 
-          #ищем все товары в заказе
-          @basket = Basket.where(order_id: @unknown_order.id)
+          #если нашли заказ
+          if @unknown_order
 
-          #перебираем все товары в заказе и суммируем кол-во
-          @basket.each do |num|
-            @number = @number + num.number
-          end
+            #включаем счетчик
+            @number = 0
 
-          #если у данного заказа есть товары(возможен вариант когда пользователь удалил все товары из заказа, а заказ остался)
-          if @number != 0
-            @number
-          #иначе
+            #ищем все товары в заказе
+            @basket = Basket.where(order_id: @unknown_order.id)
+
+            #перебираем все товары в заказе и суммируем кол-во
+            @basket.each do |num|
+              @number = @number + num.number
+            end
+
+            #если у данного заказа есть товары(возможен вариант когда пользователь удалил все товары из заказа, а заказ остался)
+            if @number != 0
+              @number
+              #иначе
+            else
+              @basket = 'нет'
+            end
+
+          #если нет заказа
           else
             @basket = 'нет'
           end
 
-        #если нет заказа
+
         else
           @basket = 'нет'
         end

@@ -179,11 +179,11 @@ $(document).ready(function() {
                 //обновляем кол-во товаров в корзине
                 basket.html('Товаров в корзине ' + data.numbers_in_basket);
 
-                //если число данного товара равно единице
-                if(data.number == 1){
+                //если число данного товара до уменьшения было равно единице
+                if(data.numbers_product_before == 1){
 
                     //обновляем итоговую сумму после уменьшения товара на единицу
-                    final.html(Number(value)-data.price);
+                    final.html(Number(value));
 
                     //вырубаем отправку формы по клику, чтобы не было возможности сделать кол-во равным нулю
                     $(minus).click(function() {
@@ -195,7 +195,6 @@ $(document).ready(function() {
                     final.html(Number(value)-data.price);
                 }
             }
-
 
         }).on("ajax:error", function (xhr, data) {
             //как то можно обработать ошибку
