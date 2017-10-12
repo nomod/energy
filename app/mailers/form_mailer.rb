@@ -22,4 +22,12 @@ class FormMailer < ApplicationMailer
     @user = user
     mail(to: "#{@user.email}", subject: 'Пароль обновлен')
   end
+
+  def order_email(order, user, mass_products, mass_products_in_basket_full)
+    @order = order
+    @user = user
+    @mass_products = mass_products
+    @mass_products_in_basket_full = mass_products_in_basket_full
+    mail(to: 'nomod@list.ru', subject: 'Новая заявка')
+  end
 end

@@ -15,6 +15,8 @@ p
       .form-user
         = f.text_field :surname, required: true, placeholder: 'Фамилия*', minlength: 3, value: current_user.surname
       .form-user
+        = f.number_field :phone, required: true, placeholder: 'Контактный телефон*', minlength: 5, value: current_user.phone
+      .form-user
         = f.password_field :password, required: true, placeholder: 'Пароль*', minlength: 6
       .form-user
         = f.password_field :password_confirmation, required: true, placeholder: 'Подтвердите пароль*', minlength: 6

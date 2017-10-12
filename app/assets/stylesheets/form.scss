@@ -118,6 +118,12 @@ form.new_category, .edit_category, .new_product, .edit_product, .new_product_wit
 }
 .form {
 
+  & span.edit{
+    margin-bottom: 20px;
+    margin-top: 10px;
+    display: block;
+  }
+
   & input[type="text"], input[type="number"], textarea {
     width: 100%;
     vertical-align: middle;
@@ -137,6 +143,7 @@ form.new_category, .edit_category, .new_product, .edit_product, .new_product_wit
     &:focus {
       box-shadow: inset 2px 2px 5px rgba(154, 147, 140, 0.5), 1px 1px 5px rgba(255, 255, 255, 1)
     }
+
   }
 
   #product_image{

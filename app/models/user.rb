@@ -11,6 +11,7 @@ class User < ApplicationRecord
   validates_length_of :user_name, :surname, minimum: 3, message: 'Минимальная длина 3 символа'
   validates_format_of :user_name, :surname, with: /[\u0410-\u044F]+/i, message: 'пишите русскими буквами'
   validates_format_of :email, with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i, message: 'неккоректный формат'
+  validates_format_of :phone, with: /\A((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}\z/, message: 'некорректный номер'
 
   #проверка уникальности email в базе с учетом регистра
   validates_uniqueness_of :email, case_sensitive: false

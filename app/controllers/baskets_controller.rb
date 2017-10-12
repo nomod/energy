@@ -512,6 +512,9 @@ class BasketsController < ApplicationController
         #смотрим заказ текущего пользователя в статусе оформляется
         @order = Order.find_by(user_id: current_user.id, order_status_id: 1)
 
+        #для отправки письма
+        @user = current_user
+
       #если не авторизован
       else
 
@@ -523,6 +526,9 @@ class BasketsController < ApplicationController
 
         #смотрим текущего пользователя
         @unknown_user = Unknown_User.find_by(unknown_remember_token: @unknown_remember_token)
+
+        #для отправки письма
+        @user = @unknown_user
 
         #смотрим заказ текущего пользователя в статусе оформляется
         @order = Order.find_by(user_id: @unknown_user.id, order_status_id: 1)
@@ -555,8 +561,21 @@ class BasketsController < ApplicationController
         @mass_products.push(@product)
       end
 
-      flash[:success] = 'Ваш заказ в обработке!'
-      redirect_to '/baskets/show'
+      #отправляем уведомление о заказе на почту админа
+      if FormMailer.order_email(@order, @user, @mass_products, @mass_products_in_basket_full).deliver_now
+
+        #если пользователь не зарегистрирован
+        if @order.status_user_id == 2
+          flash[:success] = "#{@user.unknown_user_name}, Ваш заказ в обработке!"
+        end
+        #если пользователь зарегистрирован
+        if @order.status_user_id == 1
+          flash[:success] = "#{@user.user_name}, Ваш заказ в обработке!"
+        end
+
+        redirect_to '/baskets/show'
+
+      end
 
     end
 

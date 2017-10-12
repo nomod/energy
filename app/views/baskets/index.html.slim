@@ -90,8 +90,20 @@
     = form_for @basket do |f|
       = f.hidden_field :order_id, value: "#{@order.id}"
       = f.hidden_field :order_status_id, value: '2'
+
+      //если пользователь зарегистрирован
       - if !current_user.nil?
         = f.hidden_field :status_user_id, value: '1'
+        .form
+          = label_tag 'Ваша электронная почта'
+          = text_field_tag :email, nil, required: true, placeholder: 'Электронная почта*', disabled: true, minlength: 5, value: current_user.email
+        .form
+          = label_tag 'Ваш контактный телефон'
+          = number_field_tag :phone, nil, required: true, placeholder: 'Контактный телефон*',disabled: true, minlength: 5, value: current_user.phone
+        .form
+          span.edit = link_to 'Вы можете поменять контактные данные через профиль', current_user
+
+      //если пользователь не зарегистрирован
       - else
         = f.hidden_field :status_user_id, value: '2'
         .form
@@ -100,6 +112,8 @@
           = number_field_tag :telephone, nil, required: true, placeholder: 'Телефон*', minlength: 3
         .form
           = text_field_tag :email, nil, required: true, placeholder: 'Электронная почта*', minlength: 5
+
+
       = f.submit('Оформить заказ', class: 'btn-primary', name: 'order')
 
 //если заказа нет

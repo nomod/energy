@@ -1,0 +1,46 @@
+h2 Информация о клиенте и контакты
+
+//статус пользователя, который сделал заказ
+- @user_status = @order.status_user_id
+
+//если пользователь не зарегестрирован
+- if @user_status == 2
+
+  p = "Клиент: #{@user.unknown_user_name}"
+  p = "E-mail: #{@user.email}"
+  p = "Телефон: #{@user.telephone}"
+
+//если пользователь зарегестрирован
+- if @user_status == 1
+
+  p = "Клиент: #{@user.user_name}"
+  p = "E-mail: #{@user.email}"
+  p = "Телефон: #{@user.phone}"
+
+h2 Информация о заказе
+
+//включаем счетчик общей суммы заказа
+- @summ = 0
+
+
+- @mass_products.each_with_index do |product, index|
+
+  //число товаров
+  - @numbers_product = @mass_products_in_basket_full[index].number
+  //цена товара
+  - @price_product = product.price
+  //сумма данного заказа
+  - @sum_order = @numbers_product * @price_product
+
+  //обновляем счетчик общей суммы заказа
+  - @summ = @summ + @sum_order
+
+  p = "Название продукта: #{product.product_title}"
+  p = "Цена за шт.: #{product.price} руб."
+  p = "Количество шт.: #{@mass_products_in_basket_full[index].number}"
+  br
+
+.summ
+  = 'Итого заказ на сумму: '
+  span.num_summ = @summ
+  = ' руб.'

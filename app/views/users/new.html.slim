@@ -17,6 +17,8 @@ p
       .form-user
         = f.text_field :email, required: true, placeholder: 'Электронная почта*', minlength: 5, value: "#{@user.email}"
       .form-user
+        = f.number_field :phone, required: true, placeholder: 'Контактный телефон*', minlength: 5, value: "#{@user.phone}"
+      .form-user
         = f.password_field :password, required: true, placeholder: 'Пароль*', minlength: 6
       .form-user
         = f.password_field :password_confirmation, required: true, placeholder: 'Подтвердите пароль*', minlength: 6
